@@ -15,7 +15,7 @@ namespace Presentation.Components.Buttons.Scripts {
         public string FilePath {
             get => _filePath;
             set {
-                if (string.IsNullOrWhiteSpace(_filePath))
+                if (string.IsNullOrWhiteSpace(value))
                     return;
                 _textComponent.text = FileExtensions.GetFileName(value);
                 _filePath = value;
