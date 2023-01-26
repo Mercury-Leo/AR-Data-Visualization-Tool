@@ -16,6 +16,7 @@
     "com.microsoft.mrtk.uxcomponents.noncanvas": "file:MixedReality/com.microsoft.mrtk.uxcomponents.noncanvas-3.0.0-pre.14.tgz",
     "com.microsoft.mrtk.uxcore": "file:MixedReality/com.microsoft.mrtk.uxcore-3.0.0-pre.14.tgz",
     "com.microsoft.mrtk.windowsspeech": "file:MixedReality/com.microsoft.mrtk.windowsspeech-3.0.0-pre.14.tgz",
+    "com.unity.addressables": "1.19.19",
     "com.unity.collab-proxy": "1.17.7",
     "com.unity.feature.2d": "1.0.0",
     "com.unity.ide.rider": "3.0.16",
