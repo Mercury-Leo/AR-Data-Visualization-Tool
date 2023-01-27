@@ -1,6 +1,5 @@
 using System;
 using Core.DataProcessor;
-using Core.Factory;
 using Core.FileReader;
 using Infrastructure.DataProcessor;
 using Infrastructure.FileReader;
@@ -9,42 +8,38 @@ using Presentation.Components.Label.Scripts;
 using Presentation.Factories;
 using Presentation.FileSelector.Scripts;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 
 namespace Presentation.LayerOrganizer {
     public class LayerOrganizerManager : MonoBehaviour {
         [SerializeField] FileSelectorHandler _setup;
         [SerializeField] Transform _layerSelector;
-        [SerializeField] AssetReference _reference;
+
+        [SerializeField] LabelFactoryProvider _labelFactory;
 
         public StatefulInteractable _visualButton;
 
         IFileReader<string[], string> _fileReader;
         IDataProcessor<string, string[,]> _dataProcessor;
-        FactoryBase<LabelInitializer> _factory;
 
         int _labelCount;
         string[,] _data;
         LabelInitializer[] _labelGameObjects;
 
-        public Action OnLayerChanged { get; set; }
+        public Action OnOrderChanged { get; set; }
         public Action<int[], string[,]> OnOrderConfirmed { get; set; }
 
         void Awake() {
             _fileReader = new CSVReader();
             _dataProcessor = new CSVDataProcessor(_fileReader);
-            _factory = new LabelFactory(_reference.AssetGUID);
         }
 
         void OnEnable() {
             _setup.OnFileSelected += FileSelected;
-            _factory.OnCreationDone += CreationDone;
             _visualButton?.OnClicked.AddListener(ConfirmOrder);
         }
 
         void OnDisable() {
             _setup.OnFileSelected -= FileSelected;
-            _factory.OnCreationDone -= CreationDone;
             _visualButton?.OnClicked.RemoveListener(ConfirmOrder);
         }
 
@@ -64,11 +59,12 @@ namespace Presentation.LayerOrganizer {
             for (var i = 0; i < labelAmount; i++) {
                 if (_data[0, i] is null)
                     continue;
-                _factory.RequestCreation();
+                _labelFactory.OnLabelCreated += OnLabelCreated;
+                _labelFactory.RequestLabel();
             }
         }
 
-        void CreationDone(LabelInitializer label) {
+        void OnLabelCreated(LabelInitializer label) {
             if (label is null) {
                 Debug.LogError("Failed to get Label prefab.");
                 return;
@@ -78,6 +74,7 @@ namespace Presentation.LayerOrganizer {
             _labelGameObjects[_labelCount] = label;
             PopulateLayers(_labelCount);
             _labelCount++;
+            _labelFactory.OnLabelCreated -= OnLabelCreated;
         }
 
         void PopulateLayers(int index) {
@@ -86,7 +83,7 @@ namespace Presentation.LayerOrganizer {
         }
 
         void ConfirmOrder() {
-            OnOrderConfirmed?.Invoke(new []{0, 1, 2, 3}, _data);
+            OnOrderConfirmed?.Invoke(new[] { 0, 1, 2, 3 }, _data);
         }
     }
 }
