@@ -16,7 +16,7 @@ namespace Infrastructure.DataProcessor {
             var lines = _fileReader.ReadFile(file);
 
             var rows = lines.Length;
-            var columns = lines[0].Split(CSVSplit).Length;
+            var columns = lines[0].Split(CSVSplit).Length - 1;
 
             _fileData = new string[rows, columns];
 
