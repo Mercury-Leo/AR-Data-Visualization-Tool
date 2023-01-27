@@ -1,10 +1,10 @@
 using System;
-using System.Collections.Generic;
 using Core.DataProcessor;
 using Core.Factory;
 using Core.FileReader;
 using Infrastructure.DataProcessor;
 using Infrastructure.FileReader;
+using Microsoft.MixedReality.Toolkit;
 using Presentation.Components.Label.Scripts;
 using Presentation.Factories;
 using Presentation.FileSelector.Scripts;
@@ -14,10 +14,10 @@ using UnityEngine.AddressableAssets;
 namespace Presentation.LayerOrganizer {
     public class LayerOrganizerManager : MonoBehaviour {
         [SerializeField] FileSelectorHandler _setup;
-
         [SerializeField] Transform _layerSelector;
-
         [SerializeField] AssetReference _reference;
+
+        public StatefulInteractable _visualButton;
 
         IFileReader<string[], string> _fileReader;
         IDataProcessor<string, string[,]> _dataProcessor;
@@ -27,9 +27,8 @@ namespace Presentation.LayerOrganizer {
         string[,] _data;
         LabelInitializer[] _labelGameObjects;
 
-        HashSet<string>[] _entries = new HashSet<string>[5];
-
         public Action OnLayerChanged { get; set; }
+        public Action<int[], string[,]> OnOrderConfirmed { get; set; }
 
         void Awake() {
             _fileReader = new CSVReader();
@@ -40,11 +39,13 @@ namespace Presentation.LayerOrganizer {
         void OnEnable() {
             _setup.OnFileSelected += FileSelected;
             _factory.OnCreationDone += CreationDone;
+            _visualButton?.OnClicked.AddListener(ConfirmOrder);
         }
 
         void OnDisable() {
             _setup.OnFileSelected -= FileSelected;
             _factory.OnCreationDone -= CreationDone;
+            _visualButton?.OnClicked.RemoveListener(ConfirmOrder);
         }
 
         void FileSelected(string filePath) {
@@ -81,6 +82,11 @@ namespace Presentation.LayerOrganizer {
 
         void PopulateLayers(int index) {
             var label = Instantiate(_labelGameObjects[index], _layerSelector);
+            Canvas.ForceUpdateCanvases();
+        }
+
+        void ConfirmOrder() {
+            OnOrderConfirmed?.Invoke(new []{0, 1, 2, 3}, _data);
         }
     }
 }
