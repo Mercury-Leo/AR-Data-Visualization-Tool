@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using Core.Extensions;
 using Presentation.Components.Buttons.Scripts;
 using UnityEngine;
@@ -24,6 +25,9 @@ namespace Presentation.FileSelector.Scripts {
         void PopulateFiles() {
             var files = FileExtensions.GetAllFiles(_dataPath);
 
+            if (files is null)
+                return;
+
             foreach (var file in files) {
                 if (!FileExtensions.CheckIfValidFileExtension(file, ".csv"))
                     return;
@@ -41,6 +45,15 @@ namespace Presentation.FileSelector.Scripts {
 
         void FileSelected(string filePath) {
             OnFileSelected?.Invoke(filePath);
+        }
+
+        public void SetDataFolderPath(string path) {
+            if (string.IsNullOrWhiteSpace(path))
+                return;
+            if (!Directory.Exists(path))
+                return;
+            
+            _dataPath = path;
         }
     }
 }
