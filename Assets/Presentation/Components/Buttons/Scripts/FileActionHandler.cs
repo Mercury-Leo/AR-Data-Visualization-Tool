@@ -1,5 +1,6 @@
 using System;
 using Core.Extensions;
+using Microsoft.MixedReality.Toolkit;
 using Microsoft.MixedReality.Toolkit.UX;
 using TMPro;
 using UnityEngine;
@@ -9,7 +10,7 @@ namespace Presentation.Components.Buttons.Scripts {
     public class FileActionHandler : MonoBehaviour {
         [SerializeField] TMP_Text _textComponent;
         
-        PressableButton _pressableButton;
+        StatefulInteractable _pressableButton;
         string _filePath;
 
         public string FilePath {
