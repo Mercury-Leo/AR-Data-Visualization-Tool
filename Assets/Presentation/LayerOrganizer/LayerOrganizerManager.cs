@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Core.DataProcessor;
 using Core.FileReader;
 using Infrastructure.DataProcessor;
@@ -13,7 +14,6 @@ namespace Presentation.LayerOrganizer {
     public class LayerOrganizerManager : MonoBehaviour {
         [SerializeField] FileSelectorHandler _setup;
         [SerializeField] Transform _layerSelector;
-
         [SerializeField] LabelFactoryProvider _labelFactory;
 
         public StatefulInteractable _visualButton;
@@ -23,14 +23,19 @@ namespace Presentation.LayerOrganizer {
 
         int _labelCount;
         string[,] _data;
-        LabelInitializer[] _labelGameObjects;
+        LabelInitializer _labelInitializerObject;
 
         public Action OnOrderChanged { get; set; }
-        public Action<int[], string[,]> OnOrderConfirmed { get; set; }
+        public Action<HashSet<int>, string[,]> OnOrderConfirmed { get; set; }
 
         void Awake() {
             _fileReader = new CSVReader();
             _dataProcessor = new CSVDataProcessor(_fileReader);
+        }
+
+        void Start() {
+            _labelFactory.OnLabelCreated += LabelCreated;
+            _labelFactory.RequestLabel();
         }
 
         void OnEnable() {
@@ -46,44 +51,40 @@ namespace Presentation.LayerOrganizer {
         void FileSelected(string filePath) {
             _data = _dataProcessor.ProcessData(filePath);
 
-            RequestPrefab();
+            PopulateLabels();
         }
 
-        void RequestPrefab() {
+        void PopulateLabels() {
             if (_data is null)
                 return;
 
-            var labelAmount = _data.GetLength(1);
-            _labelGameObjects = new LabelInitializer[labelAmount];
-
-            for (var i = 0; i < labelAmount; i++) {
+            for (var i = 0; i < _data.GetLength(1); i++) {
                 if (_data[0, i] is null)
                     continue;
-                _labelFactory.OnLabelCreated += OnLabelCreated;
-                _labelFactory.RequestLabel();
+                CreateLabel(_data[0, i]);
             }
+            
+            Canvas.ForceUpdateCanvases();
+            Canvas.ForceUpdateCanvases();
         }
 
-        void OnLabelCreated(LabelInitializer label) {
+        void LabelCreated(LabelInitializer label) {
             if (label is null) {
                 Debug.LogError("Failed to get Label prefab.");
                 return;
             }
 
-            label.Title = _data[0, _labelCount];
-            _labelGameObjects[_labelCount] = label;
-            PopulateLayers(_labelCount);
-            _labelCount++;
-            _labelFactory.OnLabelCreated -= OnLabelCreated;
+            _labelInitializerObject = label;
+            _labelFactory.OnLabelCreated -= LabelCreated;
         }
 
-        void PopulateLayers(int index) {
-            var label = Instantiate(_labelGameObjects[index], _layerSelector);
-            Canvas.ForceUpdateCanvases();
+        void CreateLabel(string title) {
+            var label = Instantiate(_labelInitializerObject, _layerSelector);
+            label.Title = title;
         }
 
         void ConfirmOrder() {
-            OnOrderConfirmed?.Invoke(new[] { 0, 1, 2, 3 }, _data);
+            OnOrderConfirmed?.Invoke(new HashSet<int> { 3, 2, 0, 1 }, _data);
         }
     }
 }
