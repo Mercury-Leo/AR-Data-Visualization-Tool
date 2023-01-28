@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using Presentation.Components.Menu.Scripts;
 using Presentation.FileSelector.Scripts;
 using Presentation.LayerOrganizer;
 using Presentation.Visualizer;
@@ -5,6 +7,12 @@ using UnityEngine;
 
 namespace Presentation.MenuController.Scripts {
     public class MenuController : MonoBehaviour {
+        [Header("Start screen")] 
+        [SerializeField] StartingScreen _startingScreen;
+        [SerializeField] GameObject _screen;
+
+        [SerializeField] GameObject _selectionMenu;
+        
         [Header("File selector")] 
         [SerializeField] FileSelectorHandler _fileSelector;
         [SerializeField] GameObject _files;
@@ -18,13 +26,20 @@ namespace Presentation.MenuController.Scripts {
         [SerializeField] GameObject _visualizer;
 
         void OnEnable() {
+            _startingScreen.OnStartClicked += OnStartClicked;
             _fileSelector.OnFileSelected += FileSelected;
             _layerOrganizer.OnOrderConfirmed += OnOrderConfirmed;
         }
 
         void OnDisable() {
+            _startingScreen.OnStartClicked -= OnStartClicked;
             _fileSelector.OnFileSelected -= FileSelected;
             _layerOrganizer.OnOrderConfirmed -= OnOrderConfirmed;
+        }
+        
+        void OnStartClicked() {
+           _screen.SetActive(false);
+           _selectionMenu.SetActive(true);
         }
 
         void FileSelected(string obj) {
@@ -32,7 +47,7 @@ namespace Presentation.MenuController.Scripts {
             _layers.SetActive(true);
         }
 
-        void OnOrderConfirmed(int[] arg1, string[,] arg2) {
+        void OnOrderConfirmed(HashSet<int> hashSet, string[,] arg2) {
             _layers.SetActive(false);
             _visualizer.SetActive(true);
         }
