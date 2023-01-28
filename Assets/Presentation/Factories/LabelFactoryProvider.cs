@@ -30,6 +30,7 @@ namespace Presentation.Factories {
                 return;
             }
 
+            label.Title = "New";
             OnLabelCreated?.Invoke(label);
         }
 
