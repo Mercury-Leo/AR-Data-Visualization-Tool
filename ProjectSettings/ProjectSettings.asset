@@ -135,7 +135,10 @@ PlayerSettings:
     16:9: 1
     Others: 1
   bundleVersion: 1.0
-  preloadedAssets: []
+  preloadedAssets:
+  - {fileID: 11400000, guid: c677e5c4eb85b7849a8da406775c299d, type: 2}
+  - {fileID: -5841189158644435050, guid: ab6c8b28cfd1d5e4fa8a4df14bcaf71d, type: 2}
+  - {fileID: 97303841934519801, guid: 0ba3ba6bb66c8f541a1fe32a669d2205, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -645,7 +648,7 @@ PlayerSettings:
   allowUnsafeCode: 0
   useDeterministicCompilation: 1
   enableRoslynAnalyzers: 1
-  selectedPlatform: 0
+  selectedPlatform: 3
   additionalIl2CppArgs: 
   scriptingRuntimeVersion: 1
   gcIncremental: 1
@@ -656,11 +659,11 @@ PlayerSettings:
   m_MobileRenderingPath: 1
   metroPackageName: 2DURP
   metroPackageVersion: 1.0.0.0
-  metroCertificatePath: 
+  metroCertificatePath: Assets\WSATestCertificate.pfx
   metroCertificatePassword: 
-  metroCertificateSubject: 
-  metroCertificateIssuer: 
-  metroCertificateNotAfter: 0000000000000000
+  metroCertificateSubject: MercuryFinnegan
+  metroCertificateIssuer: MercuryFinnegan
+  metroCertificateNotAfter: 003879e51b53da01
   metroApplicationDescription: 2D_URP
   wsaImages: {}
   metroTileShortName: AR Data Vis Tool
@@ -680,7 +683,8 @@ PlayerSettings:
       GazeInput: True
       SpatialPerception: True
       WebCam: True
-  metroTargetDeviceFamilies: {}
+  metroTargetDeviceFamilies:
+    Holographic: True
   metroFTAName: 
   metroFTAFileTypes: []
   metroProtocolName: 
