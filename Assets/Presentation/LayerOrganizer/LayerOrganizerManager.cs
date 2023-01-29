@@ -1,12 +1,12 @@
 using System;
-using System.Collections.Generic;
+using Core;
 using Core.DataProcessor;
+using Core.Extensions;
 using Core.FileReader;
 using Infrastructure.DataProcessor;
 using Infrastructure.FileReader;
 using Microsoft.MixedReality.Toolkit;
 using Presentation.Components.Label.Scripts;
-using Presentation.Factories;
 using Presentation.FileSelector.Scripts;
 using UnityEngine;
 
@@ -14,7 +14,8 @@ namespace Presentation.LayerOrganizer {
     public class LayerOrganizerManager : MonoBehaviour {
         [SerializeField] FileSelectorHandler _setup;
         [SerializeField] Transform _layerSelector;
-        [SerializeField] LabelFactoryProvider _labelFactory;
+
+        [SerializeField] ObjectOrderHandler _objectOrderPrefab;
 
         public StatefulInteractable _visualButton;
 
@@ -23,29 +24,23 @@ namespace Presentation.LayerOrganizer {
 
         int _labelCount;
         string[,] _data;
-        LabelInitializer _labelInitializerObject;
+        int[] _order;
 
-        public Action OnOrderChanged { get; set; }
-        public Action<HashSet<int>, string[,]> OnOrderConfirmed { get; set; }
+        public Action<int[], string[,]> OnOrderConfirmed { get; set; }
 
         void Awake() {
             _fileReader = new CSVReader();
             _dataProcessor = new CSVDataProcessor(_fileReader);
         }
 
-        void Start() {
-            _labelFactory.OnLabelCreated += LabelCreated;
-            _labelFactory.RequestLabel();
-        }
-
         void OnEnable() {
             _setup.OnFileSelected += FileSelected;
-            _visualButton?.OnClicked.AddListener(ConfirmOrder);
+            _visualButton.OnClicked.AddListener(ConfirmOrder);
         }
 
         void OnDisable() {
             _setup.OnFileSelected -= FileSelected;
-            _visualButton?.OnClicked.RemoveListener(ConfirmOrder);
+            _visualButton.OnClicked.RemoveListener(ConfirmOrder);
         }
 
         void FileSelected(string filePath) {
@@ -58,33 +53,69 @@ namespace Presentation.LayerOrganizer {
             if (_data is null)
                 return;
 
-            for (var i = 0; i < _data.GetLength(1); i++) {
-                if (_data[0, i] is null)
-                    continue;
-                CreateLabel(_data[0, i]);
-            }
-            
-            Canvas.ForceUpdateCanvases();
-            Canvas.ForceUpdateCanvases();
+            var firstRow = GetOrderData();
+
+            for (var index = 0; index < firstRow.Length; index++) 
+                CreateOrderLabel(firstRow[index], index);
         }
 
-        void LabelCreated(LabelInitializer label) {
-            if (label is null) {
-                Debug.LogError("Failed to get Label prefab.");
+        string[] GetOrderData() {
+            var firstRow = _data.GetRowData(0);
+
+            _order = new int[firstRow.Length];
+
+#if UNITY_EDITOR
+            var editorOrder = EditorExtensions.GetStringArray(EditorExtensions.ColumnOrderKey);
+            if (editorOrder is null) {
+                SetOrder(firstRow);
+                return firstRow;
+            }
+
+            SetOrder(firstRow, editorOrder);
+            return editorOrder;
+
+#endif
+            SetOrder(firstRow);
+            return firstRow;
+        }
+
+        void SetOrder(string[] original, string[] moved = null) {
+            if (moved is null) {
+                for (var index = 0; index < original.Length; index++)
+                    _order[index] = index;
                 return;
             }
 
-            _labelInitializerObject = label;
-            _labelFactory.OnLabelCreated -= LabelCreated;
+            if (moved.Length != original.Length)
+                return;
+
+            for (var i = 0; i < original.Length; i++) {
+                var index = Array.IndexOf(moved, original[i]);
+                if (index != -1)
+                    _order[i] = index;
+            }
         }
 
-        void CreateLabel(string title) {
-            var label = Instantiate(_labelInitializerObject, _layerSelector);
-            label.Title = title;
+        void CreateOrderLabel(string title, int index) {
+            var objectOrder = Instantiate(_objectOrderPrefab, _layerSelector);
+            var label = objectOrder.GetComponent<LabelInitializer>();
+            if (label is not null)
+                label.Title = title;
+            objectOrder.Index = index;
+            objectOrder.OnIndexSwapped += IndexSwapped;
+        }
+
+        void IndexSwapped(int originalIndex, int movedIndex) {
+            if (_order is null)
+                return;
+
+            (_order[originalIndex], _order[movedIndex]) = (_order[movedIndex], _order[originalIndex]);
         }
 
         void ConfirmOrder() {
-            OnOrderConfirmed?.Invoke(new HashSet<int> { 3, 2, 0, 1 }, _data);
+            if (_order is null)
+                return;
+            OnOrderConfirmed?.Invoke(_order, _data);
         }
     }
 }
