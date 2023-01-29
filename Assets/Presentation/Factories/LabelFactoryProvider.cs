@@ -6,36 +6,35 @@ using UnityEngine.AddressableAssets;
 
 namespace Presentation.Factories {
     public class LabelFactoryProvider : MonoBehaviour {
-        [SerializeField] AssetReference _reference;
+        [SerializeField] AssetReference _labelReference;
 
-        FactoryBase<LabelInitializer> _factory;
+        FactoryBase<LabelInitializer> _labelFactory;
 
         public Action<LabelInitializer> OnLabelCreated { get; set; }
 
         void Awake() {
-            _factory = new LabelFactory(_reference.AssetGUID);
+            _labelFactory = new LabelFactory(_labelReference.AssetGUID);
         }
 
         void OnEnable() {
-            _factory.OnCreationDone += CreationDone;
+            _labelFactory.OnCreationDone += LabelCreationDone;
         }
 
         void OnDisable() {
-            _factory.OnCreationDone -= CreationDone;
+            _labelFactory.OnCreationDone -= LabelCreationDone;
         }
 
-        void CreationDone(LabelInitializer label) {
+        void LabelCreationDone(LabelInitializer label) {
             if (label is null) {
                 Debug.LogError("Failed to get Label prefab.");
                 return;
             }
 
-            label.Title = "New";
             OnLabelCreated?.Invoke(label);
         }
 
         public void RequestLabel() {
-            _factory.RequestCreation();
+            _labelFactory.RequestCreation();
         }
     }
 }
