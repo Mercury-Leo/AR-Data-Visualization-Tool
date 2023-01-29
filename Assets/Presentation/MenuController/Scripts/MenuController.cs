@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Presentation.Components.Menu.Scripts;
 using Presentation.FileSelector.Scripts;
 using Presentation.LayerOrganizer;
@@ -47,7 +46,7 @@ namespace Presentation.MenuController.Scripts {
             _layers.SetActive(true);
         }
 
-        void OnOrderConfirmed(HashSet<int> hashSet, string[,] arg2) {
+        void OnOrderConfirmed(int[] arg1, string[,] arg2) {
             _layers.SetActive(false);
             _visualizer.SetActive(true);
         }
