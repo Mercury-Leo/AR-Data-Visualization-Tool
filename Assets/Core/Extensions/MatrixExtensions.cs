@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Core.Extensions {
     public static class MatrixExtensions {
         public static HashSet<T>
-            GroupDataByColumnKey<T>(T[,] data, T key, int[] order, int column, int startingRow = 1) {
+            GroupDataByColumnKey<T>(this T[,] data, T key, int[] order, int column, int startingRow = 1) {
             if (GuardMatrix(data))
                 return null;
 
@@ -44,7 +44,7 @@ namespace Core.Extensions {
             return entries;
         }
 
-        public static HashSet<T> GetColumnUniqueEntries<T>(T[,] data, int column, int startingRow = 1) {
+        public static HashSet<T> GetColumnUniqueEntries<T>(this T[,] data, int column, int startingRow = 1) {
             if (GuardMatrix(data))
                 return null;
 
@@ -60,6 +60,26 @@ namespace Core.Extensions {
                 uniqueEntries.Add(data[row, column]);
 
             return uniqueEntries;
+        }
+
+        public static T[] GetRowData<T>(this T[,] data, int row) {
+            if (GuardMatrix(data))
+                return null;
+
+            var rowLength = data.GetLength(1);
+
+            if (GuardIndex(row, rowLength))
+                return null;
+
+            var rowData = new T[rowLength];
+
+            for (var i = row; i < rowLength; i++) {
+                if (data[row, i] is null)
+                    continue;
+                rowData[i] = data[row, i];
+            }
+
+            return rowData;
         }
 
         static bool GuardMatrix<T>(T[,] data) {
