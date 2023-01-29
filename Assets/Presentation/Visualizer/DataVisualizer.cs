@@ -43,10 +43,9 @@ namespace Presentation.Visualizer {
             var orderedEntries = data.GetColumnUniqueEntries(order[0]);
 
             var layers = new Transform[order.Length];
-            for (var i = 0; i < order.Length; i++) {
+            for (var i = 0; i < order.Length; i++) 
                 layers[i] = Instantiate(_horizontalGroup, _dataParent).transform;
-            }
-
+            
             foreach (var entry in orderedEntries)
                 GenerateGroup(data, order, 0, entry, null, layers);
         }
@@ -85,7 +84,6 @@ namespace Presentation.Visualizer {
         Transform CreateLabel(string title, Transform parent) {
             var label = Instantiate(_labelGameObject, parent);
             label.Title = title;
-
             return label.transform;
         }
 
