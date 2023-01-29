@@ -5,7 +5,9 @@ MonoImporter:
   serializedVersion: 2
   defaultReferences:
   - _setup: {instanceID: 0}
-  - _layerSelector: {fileID: 5021120313764191815, guid: a5702d56866f7204198432d0679a6ef4, type: 3}
+  - _layerSelector: {instanceID: 0}
+  - _objectOrderPrefab: {fileID: 1444060673, guid: 1d1168af4697f3143b8e08017097c73b, type: 3}
+  - _visualButton: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
