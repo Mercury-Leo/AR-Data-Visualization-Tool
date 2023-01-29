@@ -9,11 +9,11 @@ namespace Presentation.Components.Menu.Scripts {
         public Action OnStartClicked { get; set; }
 
         void OnEnable() {
-            _startButton?.OnClicked.AddListener(StartVisualization);
+            _startButton.OnClicked.AddListener(StartVisualization);
         }
 
         void OnDisable() {
-            _startButton?.OnClicked.RemoveListener(StartVisualization);
+            _startButton.OnClicked.RemoveListener(StartVisualization);
         }
 
         void StartVisualization() {
