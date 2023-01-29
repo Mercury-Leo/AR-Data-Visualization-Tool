@@ -1,21 +1,23 @@
 using System;
 using System.IO;
 using Core.Extensions;
+using Microsoft.MixedReality.Toolkit;
 using Presentation.Components.Buttons.Scripts;
 using UnityEngine;
 
 namespace Presentation.FileSelector.Scripts {
     public class FileSelectorHandler : MonoBehaviour {
-        [SerializeField] GameObject _actionButton;
+        [SerializeField] StatefulInteractable _actionButton;
 
         [SerializeField] Transform _files;
 
         string _dataPath;
+        const string DataFolder = "Assets/Data";
 
         public Action<string> OnFileSelected { get; set; }
 
         void Awake() {
-            _dataPath = "Assets/Data";
+            _dataPath = DataFolder;
         }
 
         void Start() {
@@ -52,7 +54,7 @@ namespace Presentation.FileSelector.Scripts {
                 return;
             if (!Directory.Exists(path))
                 return;
-            
+
             _dataPath = path;
         }
     }
