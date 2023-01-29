@@ -8,11 +8,11 @@ using UnityEngine;
 namespace Presentation.FileSelector.Scripts {
     public class FileSelectorHandler : MonoBehaviour {
         [SerializeField] StatefulInteractable _actionButton;
-
         [SerializeField] Transform _files;
 
         string _dataPath;
         const string DataFolder = "Assets/Data";
+        const string CsvExtension = ".csv";
 
         public Action<string> OnFileSelected { get; set; }
 
@@ -31,7 +31,7 @@ namespace Presentation.FileSelector.Scripts {
                 return;
 
             foreach (var file in files) {
-                if (!FileExtensions.CheckIfValidFileExtension(file, ".csv"))
+                if (!FileExtensions.CheckIfValidFileExtension(file, CsvExtension))
                     return;
 
                 var action = Instantiate(_actionButton, _files);
