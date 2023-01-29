@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Core.Extensions;
 using Presentation.Components.Label.Scripts;
 using Presentation.Components.Line.Scripts;
@@ -34,23 +33,22 @@ namespace Presentation.Visualizer {
             _layerOrganizer.OnOrderConfirmed -= OrderConfirmed;
         }
 
-        void OrderConfirmed(HashSet<int> order, string[,] data) {
-            if (order.Count <= 0)
+
+        void OrderConfirmed(int[] order, string[,] data) {
+            if (order.Length <= 0)
                 return;
             if (data is null)
                 return;
 
-            var orderArr = order.ToArray();
+            var orderedEntries = data.GetColumnUniqueEntries(order[0]);
 
-            var orderedEntries = MatrixExtensions.GetColumnUniqueEntries(data, orderArr[0]);
-
-            var layers = new Transform[orderArr.Length];
-            for (var i = 0; i < orderArr.Length; i++) {
+            var layers = new Transform[order.Length];
+            for (var i = 0; i < order.Length; i++) {
                 layers[i] = Instantiate(_horizontalGroup, _dataParent).transform;
             }
 
             foreach (var entry in orderedEntries)
-                GenerateGroup(data, orderArr, 0, entry, null, layers);
+                GenerateGroup(data, order, 0, entry, null, layers);
         }
 
         void GenerateGroup(string[,] data, int[] order, int k, string entryData, Transform upperLabel,
@@ -68,7 +66,7 @@ namespace Presentation.Visualizer {
                 return;
             }
 
-            var dataLabels = MatrixExtensions.GroupDataByColumnKey(data, entryData, order, k);
+            var dataLabels = data.GroupDataByColumnKey(entryData, order, k);
 
             CreateLabelWithLine(data, order, k, upperLabel, layers, dataLabels);
         }
