@@ -175,54 +175,8 @@ MonoBehaviour:
   _layerOrganizer: {fileID: 1564344008}
   _dataParent: {fileID: 4661658202835681198}
   _labelFactory: {fileID: 1269209872}
-  _refresher: {fileID: 391196414}
   _horizontalGroup: {fileID: 4344437208127955716, guid: 216be788c6b6600439f57a9ac6ef36c4, type: 3}
   _linePrefab: {fileID: 1564156134108242563, guid: ca6dd27368950be40838b659c7b690f8, type: 3}
---- !u!1 &391196413
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 391196415}
-  - component: {fileID: 391196414}
-  m_Layer: 0
-  m_Name: Refresher
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &391196414
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 391196413}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d99932697b6bda141abbbcde5b505711, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _rectTransform: {fileID: 2107284290}
---- !u!4 &391196415
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 391196413}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1945919031}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &665642524
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -651,7 +605,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _setup: {fileID: 1525181807}
-  _layoutRefresh: {fileID: 391196414}
   _layerSelector: {fileID: 2044797200}
   _objectOrderPrefab: {fileID: 1444060673, guid: 1d1168af4697f3143b8e08017097c73b, type: 3}
   _visualButton: {fileID: 1101630829}
@@ -798,18 +751,12 @@ Transform:
   - {fileID: 68525790}
   - {fileID: 1908305273}
   - {fileID: 1269209871}
-  - {fileID: 391196415}
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!224 &2044797200 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2044797200, guid: f1f7a74ad92f7924ab08d3cc187c0e35, type: 3}
-  m_PrefabInstance: {fileID: 665642524}
-  m_PrefabAsset: {fileID: 0}
---- !u!224 &2107284290 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 3758113562192789381, guid: f1f7a74ad92f7924ab08d3cc187c0e35, type: 3}
   m_PrefabInstance: {fileID: 665642524}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &616001179644110661
