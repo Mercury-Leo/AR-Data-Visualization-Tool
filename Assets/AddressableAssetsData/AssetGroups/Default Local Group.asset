@@ -21,6 +21,10 @@ MonoBehaviour:
     m_Address: Label.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: 1d1168af4697f3143b8e08017097c73b
+    m_Address: OrderObject Variant.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: e0cfc1c1a5bba9843ac0eea9c07ebb69, type: 2}
   m_SchemaSet:
